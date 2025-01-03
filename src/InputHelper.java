@@ -42,17 +42,17 @@ public class InputHelper {
         }
     }
 
-    // Metodo per leggere numero intero positivo
-    public static int leggiInteroPositivo(String messaggio) {
+    // Metodo per leggere numero intero non negativo
+    public static int leggiInteroNonNegativo(String messaggio) {
         int numero;
         while (true) {
             System.out.println(messaggio);
             try {
-                numero = Integer.parseInt(scanner.nextLine().trim());
-                if (numero > 0) {
+                numero = Integer.parseInt(scanner.nextLine().trim()); // Legge il valore
+                if (numero >= 0) { // Accetta 0 o numeri positivi
                     return numero;
                 } else {
-                    System.out.println("Il numero deve essere positivo. Riprova.");
+                    System.out.println("Il numero deve essere 0 o positivo. Riprova.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Inserisci un numero valido. Riprova.");

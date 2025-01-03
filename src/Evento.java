@@ -13,9 +13,6 @@ public class Evento {
     private static final String ERRORE_DATA_PASSATA = "La data dell'evento risulta passata.";
     private static final String ERRORE_POSTI_NEGATIVI = "Il numero di posti totale non può essere inferiore a 0.";
     private static final String ERRORE_POSTI_FINITI = "Non ci sono posti disponibili.";
-    private static final String ERRORE_NESSUNA_PRENOTAZIONE = "Non ci sono prenotazioni da disdire.";
-    private static final String MESSAGGIO_PRENOTAZIONE_SUCCESSO = "Prenotazione effettuata con successo.";
-    private static final String MESSAGGIO_DISDETTA_SUCCESSO = "Disdetta effettuata con successo.";
 
     // Costruttore
     public Evento(String titolo, LocalDate data, int postiTotali) {
@@ -78,27 +75,107 @@ public class Evento {
         return postiPrenotati > 0;
     }
 
-    public String prenota() {
+    public String prenota(int numeroPrenotazioni) {
         if (isEventoPassato()) {
             throw new IllegalStateException(ERRORE_DATA_PASSATA);
         }
+
         if (!hasPostiDisponibili()) {
             throw new IllegalStateException(ERRORE_POSTI_FINITI);
         }
-        postiPrenotati++;
-        return MESSAGGIO_PRENOTAZIONE_SUCCESSO;
+
+        int postiDisponibili = postiTotali - postiPrenotati;
+
+        if (numeroPrenotazioni > postiDisponibili) {
+            return "Posti insufficienti: disponibili solo " + postiDisponibili + " posti.";
+        }
+
+        // Effettua le prenotazioni
+        postiPrenotati += numeroPrenotazioni;
+
+        return numeroPrenotazioni == 1
+                ? "1 prenotazione effettuata con successo."
+                : numeroPrenotazioni + " prenotazioni effettuate con successo.";
     }
 
-    public String disdici() {
+    // public String prenota(int numeroPrenotazioni) {
+    // // Verifica se la data dell'evento è passata
+    // if (isEventoPassato()) {
+    // throw new IllegalStateException(ERRORE_DATA_PASSATA);
+    // }
+
+    // // Verifica se ci sono posti disponibili
+    // if (!hasPostiDisponibili()) {
+    // throw new IllegalStateException(ERRORE_POSTI_FINITI);
+    // }
+    // int prenotazioniEffettuate = 0; // Conta le prenotazioni effettuate
+    // for (int i = 0; i < numeroPrenotazioni; i++) {
+    // if (!hasPostiDisponibili()) {
+    // break; // Esce dal ciclo se non ci sono più posti
+    // }
+    // postiPrenotati++;
+    // prenotazioniEffettuate++;
+    // }
+
+    // if (prenotazioniEffettuate == 0) {
+    // return ERRORE_POSTI_FINITI;
+    // }
+
+    // // Costruisce il messaggio in base al numero di prenotazioni effettuate
+    // return prenotazioniEffettuate == 1
+    // ? "1 prenotazione effettuata con successo."
+    // : prenotazioniEffettuate + " prenotazioni effettuate con successo.";
+    // }
+
+    public String disdici(int numeroDisdette) {
+        // Verifica se la data dell'evento è passata
         if (isEventoPassato()) {
             throw new IllegalStateException(ERRORE_DATA_PASSATA);
         }
-        if (!hasPrenotazioni()) {
-            throw new IllegalStateException(ERRORE_NESSUNA_PRENOTAZIONE);
+
+        int disdetteEffettuate = 0; // Conta le disdette effettuate
+        for (int i = 0; i < numeroDisdette; i++) {
+            if (!hasPrenotazioni()) {
+                break; // Esce dal ciclo se non ci sono prenotazioni da disdire
+            }
+            postiPrenotati--;
+            disdetteEffettuate++;
         }
-        postiPrenotati--;
-        return MESSAGGIO_DISDETTA_SUCCESSO;
+
+        if (disdetteEffettuate == 0) {
+            return "Non è stato possibile effettuare disdette.";
+        }
+
+        // Costruisce il messaggio in base al numero di disdette effettuate
+        return disdetteEffettuate == 1
+                ? "1 disdetta effettuata con successo."
+                : disdetteEffettuate + " disdette effettuate con successo.";
     }
+
+    // public String disdici(int numeroDisdette) {
+    // // Verifica se la data dell'evento è passata
+    // if (isEventoPassato()) {
+    // throw new IllegalStateException(ERRORE_DATA_PASSATA);
+    // }
+
+    // int disdetteEffettuate = 0; // Conta le disdette effettuate
+    // for (int i = 0; i < numeroDisdette; i++) {
+    // if (!hasPrenotazioni()) {
+    // break; // Esce dal ciclo se non ci sono prenotazioni da disdire
+    // }
+    // postiPrenotati--;
+    // disdetteEffettuate++;
+    // }
+
+    // if (disdetteEffettuate == 0) {
+    // return "Non è stato possibile effettuare disdette.";
+    // }
+
+    // Costruisce il messaggio in base al numero di disdette effettuate
+    // return disdetteEffettuate==1?"1 disdetta effettuata con
+    // successo.":disdetteEffettuate+" disdette effettuate con successo.";
+
+    // }
 
     @Override
     public String toString() {
