@@ -6,7 +6,7 @@ public class Evento {
     // Attributi
     private String titolo;
     private LocalDate data;
-    private final int postiTotali;
+    private int postiTotali;
     private int postiPrenotati;
 
     // Costanti per messaggi di errore e di successo
@@ -14,8 +14,8 @@ public class Evento {
     private static final String ERRORE_POSTI_NEGATIVI = "Il numero di posti totale non può essere inferiore a 0.";
     private static final String ERRORE_POSTI_FINITI = "Non ci sono posti disponibili.";
     private static final String ERRORE_NESSUNA_PRENOTAZIONE = "Non ci sono prenotazioni da disdire.";
-    public static final String MESSAGGIO_PRENOTAZIONE_SUCCESSO = "Prenotazione effettuata con successo.";
-    public static final String MESSAGGIO_DISDETTA_SUCCESSO = "Disdetta effettuata con successo.";
+    private static final String MESSAGGIO_PRENOTAZIONE_SUCCESSO = "Prenotazione effettuata con successo.";
+    private static final String MESSAGGIO_DISDETTA_SUCCESSO = "Disdetta effettuata con successo.";
 
     // Costruttore
     public Evento(String titolo, LocalDate data, int postiTotali) {
@@ -25,31 +25,6 @@ public class Evento {
         this.data = data;
         this.postiTotali = postiTotali;
         this.postiPrenotati = 0;
-    }
-
-    // Metodi privati
-    private void validaData(LocalDate data) {
-        if (data.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException(ERRORE_DATA_PASSATA);
-        }
-    }
-
-    private void validaPostiTotali(int postiTotali) {
-        if (postiTotali <= 0) {
-            throw new IllegalArgumentException(ERRORE_POSTI_NEGATIVI);
-        }
-    }
-
-    private boolean isEventoPassato() {
-        return data.isBefore(LocalDate.now());
-    }
-
-    private boolean hasPostiDisponibili() {
-        return postiPrenotati < postiTotali;
-    }
-
-    private boolean hasPrenotazioni() {
-        return postiPrenotati > 0;
     }
 
     // Getter e Setter
@@ -78,33 +53,51 @@ public class Evento {
         return postiPrenotati;
     }
 
-    // Metodi pubblici
-    public void prenota() {
-        if (isEventoPassato()) {
-            System.out.println(ERRORE_DATA_PASSATA);
-            return;
+    // Metodi
+    private void validaData(LocalDate data) {
+        if (data.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException(ERRORE_DATA_PASSATA);
         }
-        if (!hasPostiDisponibili()) {
-            System.out.println(ERRORE_POSTI_FINITI);
-            return;
-        }
-        postiPrenotati++;
-        System.out.println("MESSAGGIO_PRENOTAZIONE_SUCCESSO");
-        return;
     }
 
-    public void disdici() {
+    private void validaPostiTotali(int postiTotali) {
+        if (postiTotali <= 0) {
+            throw new IllegalArgumentException(ERRORE_POSTI_NEGATIVI);
+        }
+    }
+
+    private boolean isEventoPassato() {
+        return data.isBefore(LocalDate.now());
+    }
+
+    private boolean hasPostiDisponibili() {
+        return postiPrenotati < postiTotali;
+    }
+
+    private boolean hasPrenotazioni() {
+        return postiPrenotati > 0;
+    }
+
+    public String prenota() {
         if (isEventoPassato()) {
-            System.out.println(ERRORE_DATA_PASSATA);
-            return;
+            throw new IllegalStateException(ERRORE_DATA_PASSATA);
+        }
+        if (!hasPostiDisponibili()) {
+            throw new IllegalStateException(ERRORE_POSTI_FINITI);
+        }
+        postiPrenotati++;
+        return MESSAGGIO_PRENOTAZIONE_SUCCESSO;
+    }
+
+    public String disdici() {
+        if (isEventoPassato()) {
+            throw new IllegalStateException(ERRORE_DATA_PASSATA);
         }
         if (!hasPrenotazioni()) {
-            System.out.println(ERRORE_NESSUNA_PRENOTAZIONE);
-            return;
+            throw new IllegalStateException(ERRORE_NESSUNA_PRENOTAZIONE);
         }
         postiPrenotati--;
-        System.out.println(MESSAGGIO_DISDETTA_SUCCESSO);
-        return;
+        return MESSAGGIO_DISDETTA_SUCCESSO;
     }
 
     @Override
