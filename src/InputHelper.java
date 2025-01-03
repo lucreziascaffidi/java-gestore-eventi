@@ -27,8 +27,15 @@ public class InputHelper {
             System.out.println(messaggio);
             String input = scanner.nextLine().trim();
             try {
+                // Prova a parsare la data
                 data = LocalDate.parse(input, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                return data;
+
+                // Controlla se la data è nel passato
+                if (data.isBefore(LocalDate.now())) {
+                    System.out.println("La data deve essere presente o futura. Riprova.");
+                } else {
+                    return data; // Ritorna la data valida
+                }
             } catch (DateTimeParseException e) {
                 System.out.println("Formato data non valido. Usa il formato dd/MM/yyyy.");
             }
