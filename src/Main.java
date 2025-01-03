@@ -32,6 +32,7 @@ public class Main {
                 if (risposta.equalsIgnoreCase("S")) {
                     String messaggioConferma = evento.prenota(postiDisponibili);
                     System.out.println(messaggioConferma);
+                    break;
                 } else {
                     System.out.println("Operazione annullata. Nessuna prenotazione effettuata.");
                 }
@@ -61,6 +62,7 @@ public class Main {
                 if (risposta.equalsIgnoreCase("S")) {
                     String messaggioConferma = evento.disdici(postiPrenotati);
                     System.out.println(messaggioConferma);
+                    break;
                 } else {
                     System.out.println("Operazione annullata. Nessuna disdetta effettuata.");
                 }
