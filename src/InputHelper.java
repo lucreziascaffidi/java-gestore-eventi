@@ -9,15 +9,15 @@ public class InputHelper {
 
     // Metodo per leggere il titolo (non vuoto)
     public static String leggiStringa(String messaggio) {
-        String input;
+        String titolo;
         do {
             System.out.println(messaggio);
-            input = scanner.nextLine().trim();
-            if (input.isEmpty()) {
-                System.out.println("L'input non può essere vuoto. Riprova.");
+            titolo = scanner.nextLine().trim();
+            if (titolo.isEmpty() || !titolo.matches(".*[a-zA-Z].*")) {
+                System.out.println("Il titolo deve contenere almeno una lettera e non può essere vuoto. Riprova.");
             }
-        } while (input.isEmpty());
-        return input;
+        } while (titolo.isEmpty() || !titolo.matches(".*[a-zA-Z].*"));
+        return titolo;
     }
 
     // Metodo per leggere la data (valida)
