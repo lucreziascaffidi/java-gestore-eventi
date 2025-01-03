@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         // Lettura dati evento
         String titolo = InputHelper.leggiStringa("Inserisci il titolo dell'evento:");
-        LocalDate data = InputHelper.leggiData("Inserisci la data dell'evento (formato dd/MM/yyyy):");
+        LocalDate data = InputHelper.leggiDataSeparata();
         int postiTotali = InputHelper.leggiInteroNonNegativo("Inserisci il numero totale di posti:");
 
         // Creazione evento
