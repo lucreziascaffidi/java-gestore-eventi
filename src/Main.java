@@ -41,22 +41,17 @@ public class Main {
 
     private static void gestisciPrenotazioni(Concerto concerto) {
         while (true) {
-            // Chiedi il numero di prenotazioni
             int prenotazioni = InputHelper.leggiInteroNonNegativo(
                     "Quante prenotazioni vuoi fare? (Inserisci 0 per tornare al menu)");
-            if (prenotazioni == 0) {
-                System.out.println("Ritorno al menu principale.");
+            if (prenotazioni == 0)
                 break;
-            }
 
-            // Effettua la prenotazione
             String messaggio = concerto.prenota(prenotazioni);
             System.out.println(messaggio);
 
-            // Chiedi se continuare con altre prenotazioni
-            boolean continua = InputHelper.confermaOperazione("Vuoi effettuare altre prenotazioni?");
-            if (!continua) {
-                System.out.println("Ritorno al menu principale.");
+            stampaRiepilogoPosti(concerto);
+
+            if (InputHelper.confermaRitornoAlMenu()) {
                 break;
             }
         }
@@ -64,37 +59,33 @@ public class Main {
 
     private static void gestisciDisdette(Concerto concerto) {
         while (true) {
-            // Chiedi il numero di disdette
             int disdette = InputHelper.leggiInteroNonNegativo(
                     "Quante disdette vuoi fare? (Inserisci 0 per tornare al menu)");
-            if (disdette == 0) {
-                System.out.println("Ritorno al menu principale.");
+            if (disdette == 0)
                 break;
-            }
 
             int postiPrenotati = concerto.getPostiPrenotati();
             if (disdette > postiPrenotati) {
                 System.out.println("Errore: Hai prenotato solo " + postiPrenotati + " posti.");
                 disdette = InputHelper.leggiInteroNonNegativo(
                         "Quanti di questi vuoi disdire? (Max: " + postiPrenotati + ")");
-
-                // Se l'utente inserisce 0 per tornare al menu
-                if (disdette == 0) {
-                    System.out.println("Nessuna disdetta effettuata. Ritorno al menu principale.");
+                if (disdette == 0)
                     break;
-                }
             }
 
-            // Effettua la disdetta
             String messaggio = concerto.disdici(disdette);
             System.out.println(messaggio);
 
-            // Chiedi se continuare con altre disdette
-            boolean continua = InputHelper.confermaOperazione("Vuoi effettuare altre disdette?");
-            if (!continua) {
-                System.out.println("Ritorno al menu principale.");
+            stampaRiepilogoPosti(concerto);
+
+            if (InputHelper.confermaRitornoAlMenu()) {
                 break;
             }
         }
+    }
+
+    private static void stampaRiepilogoPosti(Concerto concerto) {
+        System.out.println("Posti prenotati: " + concerto.getPostiPrenotati());
+        System.out.println("Posti disponibili: " + (concerto.getPostiTotali() - concerto.getPostiPrenotati()));
     }
 }

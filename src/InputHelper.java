@@ -134,4 +134,8 @@ public class InputHelper {
         }
     }
 
+    public static boolean confermaRitornoAlMenu() {
+        return !confermaOperazione("Vuoi continuare con questa operazione?");
+    }
+
 }
