@@ -77,16 +77,27 @@ public class Main {
             System.out.println("Ci dispiace. Non sono presenti ancora eventi nel programma.");
             return;
         }
-        System.out.println(programma.descriviProgramma());
 
-        String titolo = InputHelper.leggiTitolo("Inserisci il titolo dell'evento su cui operare:");
-        Evento evento = programma.getEventoByTitolo(titolo);
+        Evento evento = null;
 
-        if (evento == null) {
-            System.out.println("Errore: Evento non trovato.");
-            return;
+        // Chiede un titolo valido o offre la possibilità di tornare al menu
+        while (evento == null) {
+            System.out.println("\nEventi disponibili:");
+            System.out.println(programma.descriviProgramma());
+
+            String titolo = InputHelper.leggiTitolo("Inserisci il titolo dell'evento su cui operare:");
+            evento = programma.getEventoByTitolo(titolo);
+
+            if (evento == null) {
+                System.out.println("Errore: Evento non trovato.");
+                boolean riprova = InputHelper.confermaOperazione("Vuoi riprovare? (S/N)");
+                if (!riprova) {
+                    return; // Torna al menu principale
+                }
+            }
         }
 
+        // Gestisce prenotazioni o disdette per l'evento trovato
         while (true) {
             System.out.println("\n1. Prenota posti");
             System.out.println("2. Disdici posti");
