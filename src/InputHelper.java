@@ -1,13 +1,14 @@
-import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.DateTimeException;
 import java.util.Scanner;
 
 public class InputHelper {
-    // Scanner unico per leggere l'input dell'utente
     private static final Scanner scanner = new Scanner(System.in);
 
-    // Metodo per leggere il titolo (non vuoto)
-    public static String leggiStringa(String messaggio) {
+    public static String leggiTitolo(String messaggio) {
         String titolo;
         do {
             System.out.println(messaggio);
@@ -19,66 +20,118 @@ public class InputHelper {
         return titolo;
     }
 
-    // Metodo per leggere e validare data (separatamente anno, giorno, e data)
     public static LocalDate leggiDataSeparata() {
         int anno = 0, mese = 0, giorno = 0;
 
         while (true) {
             try {
-                // Chiedi l'anno
-                System.out.println("Inserisci l'anno (es. 2025):");
-                anno = Integer.parseInt(scanner.nextLine().trim());
-
-                // Chiedi il mese
-                System.out.println("Inserisci il mese (1-12):");
-                mese = Integer.parseInt(scanner.nextLine().trim());
-                if (mese < 1 || mese > 12) {
-                    throw new IllegalArgumentException("Il mese deve essere compreso tra 1 e 12.");
+                while (true) {
+                    System.out.println("Inserisci l'anno (es. 2025):");
+                    anno = Integer.parseInt(scanner.nextLine().trim());
+                    if (anno >= LocalDate.now().getYear())
+                        break;
+                    System.out.println("Errore: L'anno deve essere presente o futuro.");
                 }
 
-                // Chiedi il giorno
-                System.out.println("Inserisci il giorno:");
-                giorno = Integer.parseInt(scanner.nextLine().trim());
+                while (true) {
+                    System.out.println("Inserisci il mese (1-12):");
+                    mese = Integer.parseInt(scanner.nextLine().trim());
+                    if (mese >= 1 && mese <= 12)
+                        break;
+                    System.out.println("Errore: Il mese deve essere compreso tra 1 e 12.");
+                }
 
-                // Prova a creare la data
+                while (true) {
+                    System.out.println("Inserisci il giorno:");
+                    giorno = Integer.parseInt(scanner.nextLine().trim());
+                    if (giorno >= 1 && giorno <= 31)
+                        break;
+                    System.out.println("Errore: Il giorno deve essere compreso tra 1 e 31.");
+                }
+
                 LocalDate data = LocalDate.of(anno, mese, giorno);
-
-                // Controlla se la data è nel passato
                 if (data.isBefore(LocalDate.now())) {
                     System.out.println("Errore: La data è nel passato. Inserisci una data futura.");
                 } else {
-                    return data; // Data valida
+                    return data;
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Errore: Inserisci un numero valido.");
-            } catch (DateTimeException e) {
+            } catch (NumberFormatException | DateTimeException e) {
                 System.out.println("Errore: La data inserita non esiste. Riprova.");
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
             }
         }
     }
 
-    // Metodo per leggere numero intero non negativo
-    public static int leggiInteroNonNegativo(String messaggio) {
-        int numero;
+    public static LocalTime leggiOra(String messaggio) {
         while (true) {
             System.out.println(messaggio);
             try {
-                numero = Integer.parseInt(scanner.nextLine().trim()); // Usa lo scanner statico globale
-                if (numero >= 0) { // Accetta 0 o numeri positivi
-                    return numero;
-                } else {
-                    System.out.println("Il numero deve essere 0 o positivo. Riprova.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Inserisci un numero valido. Riprova.");
+                return LocalTime.parse(scanner.nextLine().trim(), DateTimeFormatter.ofPattern("HH:mm"));
+            } catch (DateTimeParseException e) {
+                System.out.println("Errore: Formato orario non valido. Usa il formato HH:mm.");
             }
         }
     }
 
-    // Metodo per chiudere lo scanner statico (opzionale, ma utile per pulizia)
-    public static void chiudiScanner() {
-        scanner.close();
+    public static double leggiPrezzo(String messaggio) {
+        while (true) {
+            System.out.println(messaggio);
+            try {
+                double prezzo = Double.parseDouble(scanner.nextLine().trim());
+                if (prezzo > 0) {
+                    return prezzo;
+                } else {
+                    System.out.println("Errore: Il prezzo deve essere maggiore di 0.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Errore: Inserisci un numero valido per il prezzo.");
+            }
+        }
     }
+
+    public static int leggiInteroNonNegativo(String messaggio) {
+        while (true) {
+            System.out.println(messaggio);
+            try {
+                int numero = Integer.parseInt(scanner.nextLine().trim());
+                if (numero >= 0) {
+                    return numero;
+                } else {
+                    System.out.println("Errore: Il numero deve essere 0 o positivo.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Errore: Inserisci un numero valido.");
+            }
+        }
+    }
+
+    public static int leggiSceltaMenu(String messaggio, int min, int max) {
+        while (true) {
+            System.out.println(messaggio);
+            try {
+                int scelta = Integer.parseInt(scanner.nextLine().trim());
+                if (scelta >= min && scelta <= max) {
+                    return scelta;
+                } else {
+                    System.out.println("Errore: Inserisci un numero tra " + min + " e " + max + ".");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Errore: Inserisci un numero valido.");
+            }
+        }
+    }
+
+    public static boolean confermaOperazione(String messaggio) {
+        while (true) {
+            System.out.println(messaggio + " (S/N)");
+            String risposta = scanner.nextLine().trim().toUpperCase();
+            if (risposta.equals("S")) {
+                return true;
+            } else if (risposta.equals("N")) {
+                return false;
+            } else {
+                System.out.println("Errore: Rispondi con 'S' per sì o 'N' per no.");
+            }
+        }
+    }
+
 }

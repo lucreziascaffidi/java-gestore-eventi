@@ -1,80 +1,100 @@
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Main {
     public static void main(String[] args) {
-        // Lettura dati evento
-        String titolo = InputHelper.leggiStringa("Inserisci il titolo dell'evento:");
+        System.out.println("Benvenuto nel Gestore Eventi!");
+
+        // Creazione di un Concerto
+        String titolo = InputHelper.leggiTitolo("Inserisci il titolo del concerto:");
         LocalDate data = InputHelper.leggiDataSeparata();
         int postiTotali = InputHelper.leggiInteroNonNegativo("Inserisci il numero totale di posti:");
+        LocalTime ora = InputHelper.leggiOra("Inserisci l'orario del concerto (formato HH:mm):");
+        double prezzo = InputHelper.leggiPrezzo("Inserisci il prezzo del biglietto:");
 
-        // Creazione evento
-        Evento evento = new Evento(titolo, data, postiTotali);
-        System.out.println("Evento creato: " + evento);
+        Concerto concerto = new Concerto(titolo, data, postiTotali, ora, prezzo);
+        System.out.println("Concerto creato con successo: " + concerto);
 
-        // Prenotazioni
+        // Gestione del menu principale
+        gestisciOperazioni(concerto);
+    }
+
+    private static void gestisciOperazioni(Concerto concerto) {
         while (true) {
-            int prenotazioni = InputHelper
-                    .leggiInteroNonNegativo("Quante prenotazioni vuoi fare? (Inserisci 0 per uscire)");
+            // Mostra il menu principale
+            int scelta = InputHelper.leggiSceltaMenu(
+                    "\nCosa vorresti fare?\n1. Prenotazioni\n2. Disdette\n3. Esci",
+                    1, 3);
+
+            // Gestione delle opzioni del menu
+            switch (scelta) {
+                case 1 -> gestisciPrenotazioni(concerto);
+                case 2 -> gestisciDisdette(concerto);
+                case 3 -> {
+                    System.out.println("Grazie per aver utilizzato il Gestore Eventi. Arrivederci!");
+                    return;
+                }
+                default -> System.out.println("Scelta non valida. Riprova.");
+            }
+        }
+    }
+
+    private static void gestisciPrenotazioni(Concerto concerto) {
+        while (true) {
+            // Chiedi il numero di prenotazioni
+            int prenotazioni = InputHelper.leggiInteroNonNegativo(
+                    "Quante prenotazioni vuoi fare? (Inserisci 0 per tornare al menu)");
             if (prenotazioni == 0) {
-                System.out.println("Operazione annullata. Nessuna prenotazione effettuata.");
+                System.out.println("Ritorno al menu principale.");
                 break;
             }
 
-            String messaggio = evento.prenota(prenotazioni);
-            if (messaggio.startsWith("Posti insufficienti")) {
-                System.out.println(messaggio);
+            // Effettua la prenotazione
+            String messaggio = concerto.prenota(prenotazioni);
+            System.out.println(messaggio);
 
-                // Chiede all'utente cosa fare
-                int postiDisponibili = evento.getPostiTotali() - evento.getPostiPrenotati();
-                System.out.println("Vuoi prenotare i posti disponibili (" + postiDisponibili + ")? (S/N)");
-                String risposta = InputHelper.leggiStringa("Risposta (S per sì, N per no):");
-
-                if (risposta.equalsIgnoreCase("S")) {
-                    String messaggioConferma = evento.prenota(postiDisponibili);
-                    System.out.println(messaggioConferma);
-                    break;
-                } else {
-                    System.out.println("Operazione annullata. Nessuna prenotazione effettuata.");
-                }
-            } else {
-                System.out.println(messaggio); // Messaggio di successo
+            // Chiedi se continuare con altre prenotazioni
+            boolean continua = InputHelper.confermaOperazione("Vuoi effettuare altre prenotazioni?");
+            if (!continua) {
+                System.out.println("Ritorno al menu principale.");
                 break;
             }
         }
+    }
 
-        // Disdette
+    private static void gestisciDisdette(Concerto concerto) {
         while (true) {
-            int disdette = InputHelper.leggiInteroNonNegativo("Quante disdette vuoi fare? (Inserisci 0 per uscire)");
+            // Chiedi il numero di disdette
+            int disdette = InputHelper.leggiInteroNonNegativo(
+                    "Quante disdette vuoi fare? (Inserisci 0 per tornare al menu)");
             if (disdette == 0) {
-                System.out.println("Operazione annullata. Nessuna disdetta effettuata.");
+                System.out.println("Ritorno al menu principale.");
                 break;
             }
 
-            int postiPrenotati = evento.getPostiPrenotati();
+            int postiPrenotati = concerto.getPostiPrenotati();
             if (disdette > postiPrenotati) {
-                System.out.println("Il numero di disdette richieste supera le prenotazioni attuali.");
-                System.out.println("Prenotazioni attuali: " + postiPrenotati);
+                System.out.println("Errore: Hai prenotato solo " + postiPrenotati + " posti.");
+                disdette = InputHelper.leggiInteroNonNegativo(
+                        "Quanti di questi vuoi disdire? (Max: " + postiPrenotati + ")");
 
-                // Chiede all'utente cosa fare
-                System.out.println("Vuoi disdire tutte le prenotazioni attuali (" + postiPrenotati + ")? (S/N)");
-                String risposta = InputHelper.leggiStringa("Risposta (S per sì, N per no):");
-
-                if (risposta.equalsIgnoreCase("S")) {
-                    String messaggioConferma = evento.disdici(postiPrenotati);
-                    System.out.println(messaggioConferma);
+                // Se l'utente inserisce 0 per tornare al menu
+                if (disdette == 0) {
+                    System.out.println("Nessuna disdetta effettuata. Ritorno al menu principale.");
                     break;
-                } else {
-                    System.out.println("Operazione annullata. Nessuna disdetta effettuata.");
                 }
-            } else {
-                String messaggio = evento.disdici(disdette);
-                System.out.println(messaggio); // Messaggio di successo
+            }
+
+            // Effettua la disdetta
+            String messaggio = concerto.disdici(disdette);
+            System.out.println(messaggio);
+
+            // Chiedi se continuare con altre disdette
+            boolean continua = InputHelper.confermaOperazione("Vuoi effettuare altre disdette?");
+            if (!continua) {
+                System.out.println("Ritorno al menu principale.");
                 break;
             }
         }
-
-        // Stato finale
-        System.out.println("Posti prenotati: " + evento.getPostiPrenotati());
-        System.out.println("Posti disponibili: " + (evento.getPostiTotali() - evento.getPostiPrenotati()));
     }
 }
