@@ -8,8 +8,8 @@ public abstract class Evento {
     protected int postiTotali;
     protected int postiPrenotati;
 
-    private static final String ERRORE_DATA_PASSATA = "La data dell'evento risulta passata.";
-    private static final String ERRORE_POSTI_NEGATIVI = "Il numero di posti totale non può essere inferiore a 0.";
+    private static final String ERRORE_DATA_PASSATA = "Errore: La data dell'evento risulta passata.";
+    private static final String ERRORE_POSTI_NEGATIVI = "Errore: Il numero di posti totale non può essere inferiore a 0.";
 
     public Evento(String titolo, LocalDate data, int postiTotali) {
         validaData(data);
@@ -57,21 +57,20 @@ public abstract class Evento {
         }
     }
 
-    public String prenota(int numeroPrenotazioni) {
-        int postiDisponibili = postiTotali - postiPrenotati;
-
-        if (numeroPrenotazioni > postiDisponibili) {
-            return "Posti insufficienti: disponibili solo " + postiDisponibili + " posti.";
+    public boolean prenota(int numeroPrenotazioni) {
+        if (numeroPrenotazioni <= 0 || postiPrenotati + numeroPrenotazioni > postiTotali) {
+            return false;
         }
-
         postiPrenotati += numeroPrenotazioni;
-        return numeroPrenotazioni + " prenotazioni effettuate con successo.";
+        return true;
     }
 
-    public String disdici(int numeroDisdette) {
-        int disdetteEffettuate = Math.min(numeroDisdette, postiPrenotati);
-        postiPrenotati -= disdetteEffettuate;
-        return disdetteEffettuate + " disdette effettuate con successo.";
+    public boolean disdici(int numeroDisdette) {
+        if (numeroDisdette <= 0 || numeroDisdette > postiPrenotati) {
+            return false;
+        }
+        postiPrenotati -= numeroDisdette;
+        return true;
     }
 
     public abstract String descriviEvento();
