@@ -1,16 +1,20 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+// Classe astratta Evento che rappresenta un evento generico
 public abstract class Evento {
 
+    // Attributi comuni a tutti gli eventi
     protected String titolo;
     protected LocalDate data;
     protected int postiTotali;
     protected int postiPrenotati;
 
+    // Costanti per messaggi di errore
     private static final String ERRORE_DATA_PASSATA = "Errore: La data dell'evento risulta passata.";
     private static final String ERRORE_POSTI_NEGATIVI = "Errore: Il numero di posti totale non può essere inferiore a 0.";
 
+    // Costruttore con validazioni
     public Evento(String titolo, LocalDate data, int postiTotali) {
         validaData(data);
         validaPostiTotali(postiTotali);
@@ -20,6 +24,7 @@ public abstract class Evento {
         this.postiPrenotati = 0;
     }
 
+    // Getter e Setter
     public String getTitolo() {
         return titolo;
     }
@@ -45,6 +50,7 @@ public abstract class Evento {
         return postiPrenotati;
     }
 
+    // Metodi
     protected void validaData(LocalDate data) {
         if (data.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException(ERRORE_DATA_PASSATA);
@@ -73,7 +79,7 @@ public abstract class Evento {
         return true;
     }
 
-    public abstract String descriviEvento();
+    public abstract String descriviEvento(); // Ogni sottoclasse deve fornire una descrizione specifica dell'evento
 
     @Override
     public String toString() {

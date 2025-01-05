@@ -3,16 +3,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Classe per gestire una collezione di eventi
 public class ProgrammaEventi {
 
+    // Attributi
     private String titolo;
     private List<Evento> eventi;
 
+    // Costruttore
     public ProgrammaEventi(String titolo) {
         this.titolo = titolo;
         this.eventi = new ArrayList<>();
     }
 
+    // Metodi
     public void aggiungiEvento(Evento evento) {
         eventi.add(evento);
     }

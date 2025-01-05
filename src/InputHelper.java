@@ -5,9 +5,11 @@ import java.time.format.DateTimeParseException;
 import java.time.DateTimeException;
 import java.util.Scanner;
 
+// Classe utility per leggere e validare l'input dell'utente
 public class InputHelper {
     private static final Scanner scanner = new Scanner(System.in);
 
+    // Metodi
     public static String leggiTitolo(String messaggio) {
         String titolo;
         do {

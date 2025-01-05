@@ -4,15 +4,28 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        ProgrammaEventi programma = new ProgrammaEventi("Programma Concerti");
 
+        // Nuovo programma eventi
+        ProgrammaEventi programma = new ProgrammaEventi("Programma Eventi");
+
+        // Popola il programma con eventi predefiniti
+        programma.aggiungiEvento(
+                new Concerto("Arctic Monkeys", LocalDate.of(2025, 07, 16), 15000, LocalTime.of(21, 30), 40.99));
+        programma.aggiungiEvento(
+                new Concerto("Pearl Jam", LocalDate.of(2025, 07, 16), 12000, LocalTime.of(20, 45), 63.50));
+        programma.aggiungiEvento(
+                new Concerto("Guns N' Roses", LocalDate.of(2026, 5, 23), 30000, LocalTime.of(22, 00), 56.70));
+        programma.aggiungiEvento(
+                new Concerto("Aerosmith", LocalDate.of(2025, 5, 20), 50000, LocalTime.of(21, 45), 76.80));
+
+        // Menù principale
         System.out.println("Benvenuto nel Gestore Eventi!");
         while (true) {
-            System.out.println("\n1. Aggiungi Concerto");
-            System.out.println("2. Visualizza Concerti");
-            System.out.println("3. Visualizza Concerti per data");
+            System.out.println("\n1. Aggiungi Evento");
+            System.out.println("2. Visualizza Eventi");
+            System.out.println("3. Visualizza Eventi per data");
             System.out.println("4. Gestisci prenotazioni/disdette");
-            System.out.println("5. Svuota Concerti");
+            System.out.println("5. Svuota Eventi");
             System.out.println("6. Esci");
 
             int scelta = InputHelper.leggiSceltaMenu("Scegli un'opzione:", 1, 6);
@@ -47,11 +60,12 @@ public class Main {
         }
     }
 
+    // Metodi di supporto
     private static void aggiungiConcerto(ProgrammaEventi programma) {
-        String titolo = InputHelper.leggiTitolo("Inserisci il titolo del concerto:");
+        String titolo = InputHelper.leggiTitolo("Inserisci il titolo dell'evento:");
         LocalDate data = InputHelper.leggiDataSeparata();
         int postiTotali = InputHelper.leggiInteroNonNegativo("Inserisci il numero totale di posti:");
-        LocalTime ora = InputHelper.leggiOra("Inserisci l'orario del concerto (HH:mm):");
+        LocalTime ora = InputHelper.leggiOra("Inserisci l'orario dell'evento (HH:mm):");
         double prezzo = InputHelper.leggiPrezzo("Inserisci il prezzo del biglietto:");
         Concerto concerto = new Concerto(titolo, data, postiTotali, ora, prezzo);
         programma.aggiungiEvento(concerto);
@@ -68,6 +82,7 @@ public class Main {
         if (eventi.isEmpty()) {
             System.out.println("Nessun evento trovato per questa data.");
         } else {
+            System.out.println("Ecco l'elenco degli eventi presenti nella data selezionata:");
             eventi.forEach(System.out::println);
         }
     }
@@ -99,6 +114,7 @@ public class Main {
 
         // Gestisce prenotazioni o disdette per l'evento trovato
         while (true) {
+            stampaRiepilogoPosti(evento);
             System.out.println("\n1. Prenota posti");
             System.out.println("2. Disdici posti");
             System.out.println("3. Torna al menu principale");
