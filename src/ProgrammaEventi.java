@@ -51,4 +51,18 @@ public class ProgrammaEventi {
         }
         return null;
     }
+
+    public void stampaRiepilogoPrenotatiPerTutti() {
+        boolean ciSonoPrenotazioni = eventi.stream().anyMatch(evento -> evento.getPostiPrenotati() > 0);
+
+        if (!ciSonoPrenotazioni) {
+            System.out.println("Non hai ancora effettuato prenotazioni");
+        } else {
+            System.out.println("\n Riepilogo posti prenotati per tutti gli eventi");
+            for (Evento evento : eventi) {
+                System.out.println(evento.getTitolo() + ":");
+                System.out.println("Posti prenotati: " + evento.getPostiPrenotati());
+            }
+        }
+    }
 }

@@ -25,10 +25,11 @@ public class Main {
             System.out.println("2. Visualizza Eventi");
             System.out.println("3. Visualizza Eventi per data");
             System.out.println("4. Gestisci prenotazioni/disdette");
-            System.out.println("5. Svuota Eventi");
-            System.out.println("6. Esci");
+            System.out.println("5. Riepilogo delle tue prenotazioni");
+            System.out.println("6. Svuota Eventi");
+            System.out.println("7. Esci");
 
-            int scelta = InputHelper.leggiSceltaMenu("Scegli un'opzione:", 1, 6);
+            int scelta = InputHelper.leggiSceltaMenu("Scegli un'opzione:", 1, 7);
             switch (scelta) {
                 case 1 -> aggiungiConcerto(programma);
                 case 2 -> {
@@ -47,11 +48,13 @@ public class Main {
                     }
                 }
 
-                case 5 -> {
+                case 5 -> programma.stampaRiepilogoPrenotatiPerTutti();
+
+                case 6 -> {
                     programma.svuotaEventi();
                     System.out.println("Tutti gli eventi sono stati rimossi.");
                 }
-                case 6 -> {
+                case 7 -> {
                     System.out.println("Grazie per aver utilizzato il Gestore Eventi!");
                     return;
                 }
@@ -95,7 +98,6 @@ public class Main {
 
         Evento evento = null;
 
-        // Chiede un titolo valido o offre la possibilità di tornare al menu
         while (evento == null) {
             System.out.println("\nEventi disponibili:");
             System.out.println(programma.descriviProgramma());
@@ -112,7 +114,6 @@ public class Main {
             }
         }
 
-        // Gestisce prenotazioni o disdette per l'evento trovato
         while (true) {
             stampaRiepilogoPosti(evento);
             System.out.println("\n1. Prenota posti");
