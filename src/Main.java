@@ -91,43 +91,64 @@ public class Main {
     }
 
     private static void gestisciPrenotazioniDisdette(ProgrammaEventi programma) {
+        // Controllo iniziale: se non ci sono eventi, mostra messaggio e ritorna al menu
+        // principale
         if (programma.numeroEventi() == 0) {
             System.out.println("Ci dispiace. Non sono presenti ancora eventi nel programma.");
             return;
         }
 
-        Evento evento = null;
+        // Ciclo principale per selezionare e gestire eventi
+        while (true) {
+            Evento evento = null;
 
-        while (evento == null) {
-            System.out.println("\nEventi disponibili:");
-            System.out.println(programma.descriviProgramma());
+            // Selezione dell'evento da parte dell'utente
+            while (evento == null) {
+                System.out.println("\nEventi disponibili:");
+                System.out.println(programma.descriviProgramma());
 
-            String titolo = InputHelper.leggiTitolo("Inserisci il titolo dell'evento su cui operare:");
-            evento = programma.getEventoByTitolo(titolo);
+                String titolo = InputHelper.leggiTitolo("Inserisci il titolo dell'evento su cui operare:");
+                evento = programma.getEventoByTitolo(titolo);
 
-            if (evento == null) {
-                System.out.println("Errore: Evento non trovato.");
-                boolean riprova = InputHelper.confermaOperazione("Vuoi riprovare? (S/N)");
-                if (!riprova) {
-                    return; // Torna al menu principale
+                if (evento == null) {
+                    System.out.println("Errore: Evento non trovato.");
+                    boolean riprova = InputHelper.confermaOperazione("Vuoi riprovare? (S/N)");
+                    if (!riprova) {
+                        return; // Torna al menu principale
+                    }
                 }
             }
-        }
 
-        while (true) {
-            stampaRiepilogoPosti(evento);
-            System.out.println("\n1. Prenota posti");
-            System.out.println("2. Disdici posti");
-            System.out.println("3. Torna al menu principale");
+            // Menu di gestione per l'evento selezionato
+            while (true) {
+                stampaRiepilogoPosti(evento);
+                System.out.println("\n1. Prenota posti");
+                System.out.println("2. Disdici posti");
+                System.out.println("3. Seleziona un altro evento");
+                System.out.println("4. Torna al menu principale");
 
-            int scelta = InputHelper.leggiSceltaMenu("Scegli un'opzione:", 1, 3);
-            switch (scelta) {
-                case 1 -> gestisciPrenotazioni(evento);
-                case 2 -> gestisciDisdette(evento);
-                case 3 -> {
-                    return;
+                int scelta = InputHelper.leggiSceltaMenu("Scegli un'opzione:", 1, 4);
+
+                switch (scelta) {
+                    case 1 -> gestisciPrenotazioni(evento);
+                    case 2 -> gestisciDisdette(evento);
+                    case 3 -> {
+                        // Torna al ciclo principale per selezionare un altro evento
+                        evento = null;
+                        break;
+                    }
+                    case 4 -> {
+                        // Esce completamente dal metodo e torna al menu principale
+                        return;
+                    }
+                    default -> System.out.println("Opzione non valida. Riprova.");
                 }
-                default -> System.out.println("Opzione non valida. Riprova.");
+
+                // Esce dal ciclo interno per selezionare un altro evento se l'opzione 3 è stata
+                // scelta
+                if (evento == null) {
+                    break;
+                }
             }
         }
     }
@@ -160,6 +181,12 @@ public class Main {
 
     private static void gestisciDisdette(Evento evento) {
         while (true) {
+
+            if (evento.getPostiPrenotati() == 0) {
+                System.out.println("Errore: Non ci sono prenotazioni effettuate per questo evento");
+                return;
+            }
+
             int disdette = InputHelper.leggiInteroNonNegativo(
                     "Quante disdette vuoi fare? (Inserisci 0 per tornare al menu)");
 
