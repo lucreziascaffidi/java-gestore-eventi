@@ -1,3 +1,5 @@
+package gestione.util;
+
 public class MessaggiCostanti {
 
     // Messaggi di errore

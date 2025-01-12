@@ -1,3 +1,5 @@
+package gestione.util;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -6,7 +8,7 @@ import java.time.DateTimeException;
 import java.util.Scanner;
 
 // Classe utility per leggere e validare l'input dell'utente
-public class GestoreInput {
+public class ResponsabileInput {
     private static final Scanner scanner = new Scanner(System.in);
 
     // Metodi

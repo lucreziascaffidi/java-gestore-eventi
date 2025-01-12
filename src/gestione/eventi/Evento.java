@@ -1,5 +1,9 @@
+package gestione.eventi;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import gestione.util.MessaggiCostanti;
 
 // Classe astratta Evento che rappresenta un evento generico
 public abstract class Evento {

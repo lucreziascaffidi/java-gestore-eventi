@@ -1,3 +1,8 @@
+package gestione.gestori;
+
+import gestione.util.MessaggiCostanti;
+import gestione.util.ResponsabileInput;
+
 public class GestoreMenu {
 
     private GestoreEventi gestoreEventi;
@@ -10,7 +15,7 @@ public class GestoreMenu {
         System.out.println("Benvenuto nel Gestore Eventi!");
         while (true) {
             stampaMenuPrincipale();
-            int scelta = GestoreInput.leggiSceltaMenu(MessaggiCostanti.SCEGLI_OPZIONI, 1, 7);
+            int scelta = ResponsabileInput.leggiSceltaMenu(MessaggiCostanti.SCEGLI_OPZIONI, 1, 7);
             switch (scelta) {
                 case 1 -> gestoreEventi.aggiungiEvento();
                 case 2 -> gestoreEventi.visualizzaEventi();

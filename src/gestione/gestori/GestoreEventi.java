@@ -1,6 +1,14 @@
+package gestione.gestori;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
+import gestione.eventi.Concerto;
+import gestione.eventi.Evento;
+import gestione.eventi.ProgrammaEventi;
+import gestione.util.MessaggiCostanti;
+import gestione.util.ResponsabileInput;
 
 public class GestoreEventi {
 
@@ -20,11 +28,11 @@ public class GestoreEventi {
     }
 
     private Concerto creaConcerto() {
-        String titolo = GestoreInput.leggiTitolo();
-        LocalDate data = GestoreInput.leggiDataSeparata();
-        int postiTotali = GestoreInput.leggiInteroNonNegativo(MessaggiCostanti.INSERISCI_NUMERO_POSTI);
-        LocalTime ora = GestoreInput.leggiOra();
-        double prezzo = GestoreInput.leggiPrezzo();
+        String titolo = ResponsabileInput.leggiTitolo();
+        LocalDate data = ResponsabileInput.leggiDataSeparata();
+        int postiTotali = ResponsabileInput.leggiInteroNonNegativo(MessaggiCostanti.INSERISCI_NUMERO_POSTI);
+        LocalTime ora = ResponsabileInput.leggiOra();
+        double prezzo = ResponsabileInput.leggiPrezzo();
         return new Concerto(titolo, data, postiTotali, ora, prezzo);
     }
 
@@ -40,7 +48,7 @@ public class GestoreEventi {
         if (!programma.haEventi()) {
             System.out.println(MessaggiCostanti.ERRORE_NESSUN_EVENTO);
         } else {
-            LocalDate data = GestoreInput.leggiDataSeparata();
+            LocalDate data = ResponsabileInput.leggiDataSeparata();
             List<Evento> eventi = programma.eventiPerData(data);
             if (eventi.isEmpty()) {
                 System.out.println(MessaggiCostanti.ERRORE_NO_EVENTO_PER_DATA);
@@ -64,7 +72,7 @@ public class GestoreEventi {
 
             while (true) {
                 GestoreMenu.stampaMenuPrenotazioniDisdette();
-                int scelta = GestoreInput.leggiSceltaMenu(MessaggiCostanti.SCEGLI_OPZIONI, 1, 4);
+                int scelta = ResponsabileInput.leggiSceltaMenu(MessaggiCostanti.SCEGLI_OPZIONI, 1, 4);
                 switch (scelta) {
                     case 1 -> gestisciPrenotazioni(evento);
                     case 2 -> gestisciDisdette(evento);
@@ -89,21 +97,21 @@ public class GestoreEventi {
         while (true) {
             System.out.println("\nEventi disponibili:");
             System.out.println(programma.descriviProgramma());
-            String titolo = GestoreInput.leggiTitolo();
+            String titolo = ResponsabileInput.leggiTitolo();
             Evento evento = programma.getEventoByTitolo(titolo);
 
             if (evento != null)
                 return evento;
 
             System.out.println(MessaggiCostanti.ERRORE_EVENTO_NON_TROVATO);
-            if (!GestoreInput.confermaOperazione(MessaggiCostanti.CONFERMA_RIPROVA))
+            if (!ResponsabileInput.confermaOperazione(MessaggiCostanti.CONFERMA_RIPROVA))
                 return null;
         }
     }
 
     private void gestisciPrenotazioni(Evento evento) {
         while (true) {
-            int prenotazioni = GestoreInput.leggiInteroNonNegativo(MessaggiCostanti.INSERISCI_QUANTE_PRENOTAZIONI);
+            int prenotazioni = ResponsabileInput.leggiInteroNonNegativo(MessaggiCostanti.INSERISCI_QUANTE_PRENOTAZIONI);
             if (prenotazioni == 0)
                 break;
 
@@ -118,7 +126,7 @@ public class GestoreEventi {
                 System.out.println(MessaggiCostanti.ERRORE_PRENOTAZIONE);
             }
 
-            if (GestoreInput.confermaRitornoAlMenu()) {
+            if (ResponsabileInput.confermaRitornoAlMenu()) {
                 break;
             }
         }
@@ -131,7 +139,7 @@ public class GestoreEventi {
                 return;
             }
 
-            int disdette = GestoreInput.leggiInteroNonNegativo(MessaggiCostanti.INSERISCI_QUANTE_DISDETTE);
+            int disdette = ResponsabileInput.leggiInteroNonNegativo(MessaggiCostanti.INSERISCI_QUANTE_DISDETTE);
             if (disdette == 0)
                 break;
 
@@ -146,7 +154,7 @@ public class GestoreEventi {
             }
 
             evento.stampaRiepilogo();
-            if (GestoreInput.confermaRitornoAlMenu())
+            if (ResponsabileInput.confermaRitornoAlMenu())
                 break;
         }
     }

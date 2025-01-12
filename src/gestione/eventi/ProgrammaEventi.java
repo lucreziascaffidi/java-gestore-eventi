@@ -1,7 +1,11 @@
+package gestione.eventi;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import gestione.util.MessaggiCostanti;
 
 // Classe per gestire una collezione di eventi
 public class ProgrammaEventi {
