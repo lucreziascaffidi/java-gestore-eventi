@@ -6,7 +6,7 @@ import java.time.DateTimeException;
 import java.util.Scanner;
 
 // Classe utility per leggere e validare l'input dell'utente
-public class InputHelper {
+public class GestoreInput {
     private static final Scanner scanner = new Scanner(System.in);
 
     // Metodi
