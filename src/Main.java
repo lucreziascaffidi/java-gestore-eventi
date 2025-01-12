@@ -32,28 +32,11 @@ public class Main {
             int scelta = InputHelper.leggiSceltaMenu("Scegli un'opzione:", 1, 7);
             switch (scelta) {
                 case 1 -> aggiungiConcerto(programma);
-                case 2 -> {
-                    if (programma.numeroEventi() == 0) {
-                        System.out.println("Ci dispiace. Non sono presenti ancora eventi nel programma.");
-                    } else {
-                        System.out.println(programma.descriviProgramma());
-                    }
-                }
+                case 2 -> visualizzaEventi(programma);
                 case 3 -> visualizzaEventiPerData(programma);
-                case 4 -> {
-                    if (programma.numeroEventi() == 0) {
-                        System.out.println("Ci dispiace. Non sono presenti ancora eventi nel programma.");
-                    } else {
-                        gestisciPrenotazioniDisdette(programma);
-                    }
-                }
-
+                case 4 -> gestisciPrenotazioniDisdette(programma);
                 case 5 -> programma.stampaRiepilogoPrenotatiPerTutti();
-
-                case 6 -> {
-                    programma.svuotaEventi();
-                    System.out.println("Tutti gli eventi sono stati rimossi.");
-                }
+                case 6 -> svuotaEventi(programma);
                 case 7 -> {
                     System.out.println("Grazie per aver utilizzato il Gestore Eventi!");
                     return;
@@ -79,21 +62,34 @@ public class Main {
 
     }
 
-    private static void visualizzaEventiPerData(ProgrammaEventi programma) {
-        LocalDate data = InputHelper.leggiDataSeparata();
-        List<Evento> eventi = programma.eventiPerData(data);
-        if (eventi.isEmpty()) {
-            System.out.println("Nessun evento trovato per questa data.");
+    private static void visualizzaEventi(ProgrammaEventi programma) {
+        if (!programma.haEventi()) {
+            System.out.println("Ci dispiace. Non sono presenti ancora eventi nel programma.");
         } else {
-            System.out.println("Ecco l'elenco degli eventi presenti nella data selezionata:");
-            eventi.forEach(System.out::println);
+            System.out.println(programma.descriviProgramma());
         }
+    }
+
+    private static void visualizzaEventiPerData(ProgrammaEventi programma) {
+        if (!programma.haEventi()) {
+            System.out.println("Ci dispiace. Non sono presenti ancora eventi nel programma.");
+        } else {
+            LocalDate data = InputHelper.leggiDataSeparata();
+            List<Evento> eventi = programma.eventiPerData(data);
+            if (eventi.isEmpty()) {
+                System.out.println("Nessun evento trovato per questa data.");
+            } else {
+                System.out.println("Ecco l'elenco degli eventi presenti nella data selezionata:");
+                eventi.forEach(System.out::println);
+            }
+        }
+
     }
 
     private static void gestisciPrenotazioniDisdette(ProgrammaEventi programma) {
         // Controllo iniziale: se non ci sono eventi, mostra messaggio e ritorna al menu
         // principale
-        if (programma.numeroEventi() == 0) {
+        if (!programma.haEventi()) {
             System.out.println("Ci dispiace. Non sono presenti ancora eventi nel programma.");
             return;
         }
@@ -121,7 +117,7 @@ public class Main {
 
             // Menu di gestione per l'evento selezionato
             while (true) {
-                stampaRiepilogoPosti(evento);
+                evento.stampaRiepilogo();
                 System.out.println("\n1. Prenota posti");
                 System.out.println("2. Disdici posti");
                 System.out.println("3. Seleziona un altro evento");
@@ -163,7 +159,7 @@ public class Main {
             boolean success = evento.prenota(prenotazioni);
 
             if (success) {
-                double totaleSpeso = prenotazioni * evento.getPrezzoPerPosto();
+                double totaleSpeso = evento.calcolaCostoTotale(prenotazioni);
                 String messaggioPrenotazioni = prenotazioni == 1
                         ? "1 prenotazione è stata effettuata con successo."
                         : prenotazioni + " prenotazioni sono state effettuate con successo.";
@@ -171,8 +167,6 @@ public class Main {
             } else {
                 System.out.println("Errore: Impossibile prenotare i posti richiesti.");
             }
-
-            stampaRiepilogoPosti(evento);
 
             if (InputHelper.confermaRitornoAlMenu()) {
                 break;
@@ -214,16 +208,18 @@ public class Main {
                 System.out.println("Errore: Impossibile disdire i posti richiesti.");
             }
 
-            stampaRiepilogoPosti(evento);
-
+            evento.stampaRiepilogo();
             if (InputHelper.confermaRitornoAlMenu())
                 break;
         }
     }
 
-    private static void stampaRiepilogoPosti(Evento evento) {
-        System.out.println("Posti prenotati: " + evento.getPostiPrenotati());
-        System.out.println("Posti disponibili: " + (evento.getPostiTotali() -
-                evento.getPostiPrenotati()));
+    private static void svuotaEventi(ProgrammaEventi programma) {
+        if (!programma.haEventi()) {
+            System.out.println("Non ci sono eventi da rimuovere.");
+        } else {
+            programma.svuotaEventi();
+            System.out.println("Tutti gli eventi sono stati rimossi.");
+        }
     }
 }

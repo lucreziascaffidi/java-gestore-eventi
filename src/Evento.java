@@ -92,4 +92,13 @@ public abstract class Evento {
     }
 
     public abstract double getPrezzoPerPosto();
+
+    public double calcolaCostoTotale(int numeroPrenotazioni) {
+        return numeroPrenotazioni * getPrezzoPerPosto();
+    }
+
+    public void stampaRiepilogo() {
+        System.out.println("Posti prenotati: " + postiPrenotati);
+        System.out.println("Posti disponibili: " + (postiTotali - postiPrenotati));
+    }
 }

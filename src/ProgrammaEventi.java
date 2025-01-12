@@ -17,6 +17,10 @@ public class ProgrammaEventi {
     }
 
     // Metodi
+    public boolean haEventi() {
+        return !eventi.isEmpty();
+    }
+
     public void aggiungiEvento(Evento evento) {
         eventi.add(evento);
     }
@@ -58,12 +62,13 @@ public class ProgrammaEventi {
         if (!ciSonoPrenotazioni) {
             System.out.println("Non hai ancora effettuato prenotazioni");
         } else {
-            System.out.println("\n Riepilogo posti prenotati per tutti gli eventi");
+            System.out.println("\nRiepilogo posti prenotati:");
             for (Evento evento : eventi) {
-                System.out.println(evento.getTitolo() + ":");
-                System.out.println("Posti prenotati: " + evento.getPostiPrenotati());
-                double totaleSpeso = evento.getPostiPrenotati() * evento.getPrezzoPerPosto();
-                System.out.printf("Totale speso: €%.2f\n", totaleSpeso);
+                if (evento.getPostiPrenotati() > 0) {
+                    double totaleSpeso = evento.calcolaCostoTotale(evento.getPostiPrenotati());
+                    System.out.printf("%s:\n  Posti prenotati: %d\n  Totale speso: €%.2f\n",
+                            evento.getTitolo(), evento.getPostiPrenotati(), totaleSpeso);
+                }
             }
         }
     }
