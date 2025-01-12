@@ -10,13 +10,13 @@ public class InputHelper {
     private static final Scanner scanner = new Scanner(System.in);
 
     // Metodi
-    public static String leggiTitolo(String messaggio) {
+    public static String leggiTitolo() {
         String titolo;
         do {
-            System.out.println(messaggio);
+            System.out.println(MessaggiCostanti.INSERISCI_TITOLO);
             titolo = scanner.nextLine().trim();
             if (titolo.isEmpty() || !titolo.matches(".*[a-zA-Z].*")) {
-                System.out.println("Il titolo deve contenere almeno una lettera e non può essere vuoto. Riprova.");
+                System.out.println(MessaggiCostanti.ERRORE_TITOLO_INCORRETTO);
             }
         } while (titolo.isEmpty() || !titolo.matches(".*[a-zA-Z].*"));
         return titolo;
@@ -28,64 +28,66 @@ public class InputHelper {
         while (true) {
             try {
                 while (true) {
-                    System.out.println("Inserisci l'anno (es. 2025):");
+                    System.out.println(MessaggiCostanti.INSERISCI_ANNO);
                     anno = Integer.parseInt(scanner.nextLine().trim());
                     if (anno >= LocalDate.now().getYear())
                         break;
-                    System.out.println("Errore: L'anno deve essere presente o futuro.");
+                    System.out.println(MessaggiCostanti.ERRORE_ANNO_INCORRETTO);
                 }
 
                 while (true) {
-                    System.out.println("Inserisci il mese (1-12):");
+                    System.out.println(MessaggiCostanti.INSERISCI_MESE);
                     mese = Integer.parseInt(scanner.nextLine().trim());
                     if (mese >= 1 && mese <= 12)
                         break;
-                    System.out.println("Errore: Il mese deve essere compreso tra 1 e 12.");
+                    System.out.println(MessaggiCostanti.ERRORE_MESE_INCORRETTO);
                 }
 
                 while (true) {
-                    System.out.println("Inserisci il giorno:");
+                    System.out.println(MessaggiCostanti.INSERISCI_GIORNO);
                     giorno = Integer.parseInt(scanner.nextLine().trim());
                     if (giorno >= 1 && giorno <= 31)
                         break;
-                    System.out.println("Errore: Il giorno deve essere compreso tra 1 e 31.");
+                    System.out.println(MessaggiCostanti.ERRORE_INPUT_NUMERO);
                 }
 
                 LocalDate data = LocalDate.of(anno, mese, giorno);
                 if (data.isBefore(LocalDate.now())) {
-                    System.out.println("Errore: La data è nel passato. Inserisci una data futura.");
+                    System.out.println(MessaggiCostanti.ERRORE_EVENTO_PASSATO);
                 } else {
                     return data;
                 }
+
             } catch (NumberFormatException | DateTimeException e) {
-                System.out.println("Errore: La data inserita non esiste. Riprova.");
+                System.out.println(MessaggiCostanti.ERRORE_DATA_PASSATA);
             }
         }
+
     }
 
-    public static LocalTime leggiOra(String messaggio) {
+    public static LocalTime leggiOra() {
         while (true) {
-            System.out.println(messaggio);
+            System.out.println(MessaggiCostanti.INSERISCI_ORARIO);
             try {
                 return LocalTime.parse(scanner.nextLine().trim(), DateTimeFormatter.ofPattern("HH:mm"));
             } catch (DateTimeParseException e) {
-                System.out.println("Errore: Formato orario non valido. Usa il formato HH:mm.");
+                System.out.println(MessaggiCostanti.ERRORE_ORARIO_INCORRETTO);
             }
         }
     }
 
-    public static double leggiPrezzo(String messaggio) {
+    public static double leggiPrezzo() {
         while (true) {
-            System.out.println(messaggio);
+            System.out.println(MessaggiCostanti.INSERISCI_PREZZO);
             try {
                 double prezzo = Double.parseDouble(scanner.nextLine().trim());
                 if (prezzo > 0) {
                     return prezzo;
                 } else {
-                    System.out.println("Errore: Il prezzo deve essere maggiore di 0.");
+                    System.out.println(MessaggiCostanti.ERRORE_NUMERO_NEGATIVO);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Errore: Inserisci un numero valido per il prezzo.");
+                System.out.println(MessaggiCostanti.ERRORE_INPUT_NUMERO);
             }
         }
     }
@@ -98,10 +100,10 @@ public class InputHelper {
                 if (numero >= 0) {
                     return numero;
                 } else {
-                    System.out.println("Errore: Il numero deve essere 0 o positivo.");
+                    System.out.println(MessaggiCostanti.ERRORE_NUMERO_NEGATIVO);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Errore: Inserisci un numero valido.");
+                System.out.println(MessaggiCostanti.ERRORE_INPUT_NUMERO);
             }
         }
     }
@@ -114,10 +116,10 @@ public class InputHelper {
                 if (scelta >= min && scelta <= max) {
                     return scelta;
                 } else {
-                    System.out.println("Errore: Inserisci un numero tra " + min + " e " + max + ".");
+                    System.out.println(MessaggiCostanti.ERRORE_INPUT_NUMERO);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Errore: Inserisci un numero valido.");
+                System.out.println(MessaggiCostanti.ERRORE_INPUT_NUMERO);
             }
         }
     }
@@ -131,13 +133,13 @@ public class InputHelper {
             } else if (risposta.equals("N")) {
                 return false;
             } else {
-                System.out.println("Errore: Rispondi con 'S' per sì o 'N' per no.");
+                System.out.println(MessaggiCostanti.ERRORE_RISPOSTA_INCORRETTA);
             }
         }
     }
 
     public static boolean confermaRitornoAlMenu() {
-        return !confermaOperazione("Vuoi continuare con questa operazione?");
+        return !confermaOperazione(MessaggiCostanti.CONFERMA_CONTINUA_OPERAZIONE);
     }
 
 }

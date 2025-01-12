@@ -60,7 +60,7 @@ public class ProgrammaEventi {
         boolean ciSonoPrenotazioni = eventi.stream().anyMatch(evento -> evento.getPostiPrenotati() > 0);
 
         if (!ciSonoPrenotazioni) {
-            System.out.println("Non hai ancora effettuato prenotazioni");
+            System.out.println(MessaggiCostanti.ERRORE_POSTI_PRENOTATI);
         } else {
             System.out.println("\nRiepilogo posti prenotati:");
             for (Evento evento : eventi) {

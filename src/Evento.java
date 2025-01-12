@@ -10,10 +10,6 @@ public abstract class Evento {
     protected int postiTotali;
     protected int postiPrenotati;
 
-    // Costanti per messaggi di errore
-    private static final String ERRORE_DATA_PASSATA = "Errore: La data dell'evento risulta passata.";
-    private static final String ERRORE_POSTI_NEGATIVI = "Errore: Il numero di posti totale non può essere inferiore a 0.";
-
     // Costruttore con validazioni
     public Evento(String titolo, LocalDate data, int postiTotali) {
         validaData(data);
@@ -53,13 +49,13 @@ public abstract class Evento {
     // Metodi
     protected void validaData(LocalDate data) {
         if (data.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException(ERRORE_DATA_PASSATA);
+            throw new IllegalArgumentException(MessaggiCostanti.ERRORE_EVENTO_PASSATO);
         }
     }
 
     protected void validaPostiTotali(int postiTotali) {
         if (postiTotali <= 0) {
-            throw new IllegalArgumentException(ERRORE_POSTI_NEGATIVI);
+            throw new IllegalArgumentException(MessaggiCostanti.ERRORE_NUMERO_NEGATIVO);
         }
     }
 
@@ -83,7 +79,7 @@ public abstract class Evento {
 
     @Override
     public String toString() {
-        return formattaData(data) + " - " + titolo;
+        return String.format("%s - %s", formattaData(data), titolo);
     }
 
     public static String formattaData(LocalDate data) {
