@@ -90,4 +90,6 @@ public abstract class Evento {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         return data.format(formatter);
     }
+
+    public abstract double getPrezzoPerPosto();
 }

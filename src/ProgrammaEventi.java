@@ -62,6 +62,8 @@ public class ProgrammaEventi {
             for (Evento evento : eventi) {
                 System.out.println(evento.getTitolo() + ":");
                 System.out.println("Posti prenotati: " + evento.getPostiPrenotati());
+                double totaleSpeso = evento.getPostiPrenotati() * evento.getPrezzoPerPosto();
+                System.out.printf("Totale speso: €%.2f\n", totaleSpeso);
             }
         }
     }

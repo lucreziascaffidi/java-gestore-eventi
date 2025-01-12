@@ -163,10 +163,11 @@ public class Main {
             boolean success = evento.prenota(prenotazioni);
 
             if (success) {
-                String messaggio = prenotazioni == 1
+                double totaleSpeso = prenotazioni * evento.getPrezzoPerPosto();
+                String messaggioPrenotazioni = prenotazioni == 1
                         ? "1 prenotazione è stata effettuata con successo."
                         : prenotazioni + " prenotazioni sono state effettuate con successo.";
-                System.out.println(messaggio);
+                System.out.printf("%s\nTotale speso: €%.2f\n", messaggioPrenotazioni, totaleSpeso);
             } else {
                 System.out.println("Errore: Impossibile prenotare i posti richiesti.");
             }
